@@ -22,11 +22,11 @@ const Utils = Meta.imports.utils;
 
 
 const STYLE = 'style';
-const STYLE_NUMLOCK = 'numlock';
-const STYLE_CAPSLOCK = 'capslock';
-const STYLE_BOTH = 'both';
+const STYLE_HIGHLIGHT = 'highlight';
 const STYLE_SHOWHIDE = 'show-hide';
 const NOTIFICATIONS = 'notifications';
+const SHOW_NUMLOCK = 'show-numlock';
+const SHOW_CAPSLOCK = 'show-capslock';
 
 let indicator;
 
@@ -211,15 +211,16 @@ HighlightIndicator.prototype = {
 	displayState: function(numlock_state, capslock_state) {
 		this.panelButton.actor.visible = true;
 		
-		if (numlock_state)
-			this.numIcon.set_gicon( this.panelButton._getCustIcon('numlock-enabled-symbolic') );
-		else
-			this.numIcon.set_gicon( this.panelButton._getCustIcon('numlock-disabled-symbolic') );
-
-		if (capslock_state)
-			this.capsIcon.set_gicon( this.panelButton._getCustIcon('capslock-enabled-symbolic') );
-		else
-			this.capsIcon.set_gicon( this.panelButton._getCustIcon('capslock-disabled-symbolic') );
+		if (this.config.isShowNumLock())
+			if (numlock_state)
+				this.numIcon.set_gicon( this.panelButton._getCustIcon('numlock-enabled-symbolic') );
+			else
+				this.numIcon.set_gicon( this.panelButton._getCustIcon('numlock-disabled-symbolic') );
+		if (this.config.isShowCapsLock())
+			if (capslock_state)
+				this.capsIcon.set_gicon( this.panelButton._getCustIcon('capslock-enabled-symbolic') );
+			else
+				this.capsIcon.set_gicon( this.panelButton._getCustIcon('capslock-disabled-symbolic') );
 
 	}
 }
@@ -240,14 +241,14 @@ ShowhideIndicator.prototype = {
 	},
 	
 	displayState: function(numlock_state, capslock_state) {
-		this.panelButton.actor.visible = numlock_state || capslock_state;
-	
-		if (numlock_state)
+		this.panelButton.actor.visible = (numlock_state && this.config.isShowNumLock()) || (capslock_state && this.config.isShowCapsLock());
+
+		if (numlock_state && this.config.isShowNumLock())
 			this.numIcon.show();
 		else
 			this.numIcon.hide();
 
-		if (capslock_state)
+		if (capslock_state && this.config.isShowCapsLock())
 			this.capsIcon.show();
 		else
 			this.capsIcon.hide();
@@ -268,17 +269,20 @@ Configuration.prototype = {
 	},
 	
 	isShowNumLock: function() {
-		let widget_style = this.settings.get_string(STYLE);
-		return widget_style == STYLE_NUMLOCK || widget_style == STYLE_BOTH || widget_style == STYLE_SHOWHIDE; 
+		return this.settings.get_boolean(SHOW_NUMLOCK);
 	},
-	
+
 	isShowCapsLock: function() {
-		let widget_style = this.settings.get_string(STYLE);
-		return widget_style == STYLE_CAPSLOCK || widget_style == STYLE_BOTH || widget_style == STYLE_SHOWHIDE; 
+		return this.settings.get_boolean(SHOW_CAPSLOCK);
 	},
 	
 	isShowHideStyle: function() {
 		let widget_style = this.settings.get_string(STYLE);
 		return widget_style == STYLE_SHOWHIDE;
+	},
+
+	isHighlightStyle: function() {
+		let widget_style = this.settings.get_string(STYLE);
+		return widget_style == STYLE_HIGHLIGHT;
 	}
 }

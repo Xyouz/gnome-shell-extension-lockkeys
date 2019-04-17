@@ -7,8 +7,18 @@
 			<description>Set false to suppress num-lock or caps-lock state change
 				notifications</description>
 		</key>
+		<key name="show-numlock" type="b">
+			<default>false</default>
+			<summary>Show the state of the numlock</summary>
+			<description>Set false to hide num-lock</description>
+		</key>
+		<key name="show-capslock" type="b">
+			<default>false</default>
+			<summary>Show the state of the capslock</summary>
+			<description>Set false to hide num-lock</description>
+		</key>
 		<key name="style" type="s">
-			<default>'both'</default>
+			<default>'show-hide'</default>
 			<summary>Indicator style</summary>
 			<description>Set numlock value to display only num-lock indicator,
 				set capslock value to display only caps-lock indicator, or both for

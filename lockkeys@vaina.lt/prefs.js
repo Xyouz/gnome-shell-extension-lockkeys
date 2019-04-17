@@ -9,11 +9,11 @@ const Meta = ExtensionUtils.getCurrentExtension();
 const Utils = Meta.imports.utils;
 
 const STYLE = 'style';
-const STYLE_NUMLOCK = 'numlock';
-const STYLE_CAPSLOCK = 'capslock';
-const STYLE_BOTH = 'both';
+const STYLE_HIGHLIGHT = 'highlight';
 const STYLE_SHOWHIDE = 'show-hide';
 const NOTIFICATIONS = 'notifications';
+const SHOW_NUMLOCK = 'show-numlock';
+const SHOW_CAPSLOCK = 'show-capslock';
 
 let settings;
 
@@ -27,8 +27,10 @@ function buildPrefsWidget() {
 		border_width: 10, margin: 20});
 	frame.set_spacing(10);
 	//can not use constants here like STYLE_NUMLOCK etc, don't know why
+	frame.add(_createCheckBox(SHOW_CAPSLOCK, _("Capslock"), _("Displays informations about capslock")));
+	frame.add(_createCheckBox(SHOW_NUMLOCK, _("Numlock"), _("Displays informations about numlock")));
 	frame.add(_createComboBox(STYLE, _("Indicator Style"), _("Change indicator display options"),
-			{'numlock': _("Num-Lock Only"), 'capslock' : _("Caps-Lock Only"), 'both' : _("Both"), 'show-hide' : _("Show/Hide")}));
+			{ 'show-hide' : _("Show/Hide"), 'highlight': _("Highlight")}));
 	frame.add(_createCheckBox(NOTIFICATIONS, _("Notifications"), _("Show notifications when state changes")));
 	
 	frame.show_all();
